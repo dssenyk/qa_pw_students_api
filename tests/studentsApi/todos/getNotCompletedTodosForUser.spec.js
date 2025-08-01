@@ -7,7 +7,7 @@ test.beforeEach(async ({ todosAPI }) => {
 
   await todosAPI.assertSuccessResponseCode(response);
 
-  const body = await todosAPI.parseBody(response);
+  const body = await todosAPI.assertBodyIsNotEmpty(response);
 
   todo = body[0];
 });

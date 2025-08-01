@@ -66,10 +66,13 @@ export class TodosAPI {
   }
 
   async assertBodyIsNotEmpty(response) {
-    await this.step(`Assert response body is not empty`, async () => {
+    return await this.step(`Assert response body is not empty`, async () => {
       const body = await this.parseBody(response);
 
-      expect(body).not.toBe([]);
+      expect(Array.isArray(body)).toBe(true);
+      expect(body.length).toBeGreaterThan(0);
+
+      return body;
     });
   }
 
@@ -81,7 +84,7 @@ export class TodosAPI {
 
   async assertIdIsCorrect(response, id) {
     await this.step(`Assert the todo' id is correct`, async () => {
-      const body = await this.parseBody(response);
+      const body = await this.assertBodyIsNotEmpty(response);
 
       expect(body[0].userId).toEqual(id);
     });
@@ -89,7 +92,7 @@ export class TodosAPI {
 
   async assertCompletedValue(response, expectedValue) {
     await this.step(`Assert the todo 'completed' value is ${expectedValue}`, async () => {
-      const body = await this.parseBody(response);
+      const body = await this.assertBodyIsNotEmpty(response);
       expect(body[0].completed).toEqual(expectedValue);
     });
   }
