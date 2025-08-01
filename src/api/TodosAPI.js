@@ -65,6 +65,14 @@ export class TodosAPI {
     return await response.json();
   }
 
+  async assertBodyIsNotEmpty(response) {
+    await this.step(`Assert response body is not empty`, async () => {
+      const body = await this.parseBody(response);
+
+      expect(body).not.toBe([]);
+    });
+  }
+
   async assertSuccessResponseCode(response) {
     await this.step(`Assert the code ${SUCCESS_CODE} is returned`, async () => {
       expect(this.parseStatus(response)).toEqual(SUCCESS_CODE);
